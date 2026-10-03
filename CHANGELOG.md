@@ -2,6 +2,16 @@
 
 ## [Unreleased]
 
+## [0.2.1] — 2026-10-02 — God's Eye View through Your Agent (with security fixes and other features)
+
+- Ship each bundled data pack once. The region, marine, admin-boundary,
+  county, military-name and neighborhood packs were emitted twice by the
+  production build, as the JSON the browser fetches and as an unused
+  JavaScript copy; `dist/` drops from 54 MB to 42 MB. Under Node the loader
+  reads the JSON file directly (reporting that Node 24.14 or newer is needed
+  on a runtime too old to do so), and a test keeps app code from importing a
+  pack as a module.
+
 - Apply the Host check before the app's own routes. Vite installs its Host
   check after the middleware that plugins add, so the provider and `/api`
   routes used to answer any Host, including a DNS-rebinding name, in every
@@ -49,6 +59,22 @@
   `GEV_EMBED_FRAME_ANCESTORS` allows the framing page, and view answers go
   only to the origin that sent the view. SECURITY.md describes the MCP surface
   and the panel's browser keys.
+
+- Cockpit now enters on the existing matching map style while keeping one fixed,
+  duplicate-free carousel over `Normal / CRT / NVG / FLIR / Anime / Noir / Snow`.
+  Normal remains a real unfiltered option; Cockpit-only choices still restore
+  the captured map style through both Exit Cockpit and Reset.
+- Cyber's compact right-rail and Cockpit utility buttons now center their glyphs
+  vertically and share the same inset and edge alignment.
+- Keep Cyber Voice help/error popups and Location/Visual Presets pins clear of
+  their decorative frames. Leave space above attribution for its full logo row.
+- Add an intentionally future-facing, opt-in panel surface contract for new
+  panels to inherit compatible Normal, Cyber and Cockpit styling. Its first
+  production adopter will land separately after this change.
+- Restore the user's previous visual preset when they explicitly switch from
+  Cyber to another HUD layout, without overriding scene or shared-link state.
+- Move the aligned Cyber side-panel rails upward on desktop so the left stack
+  clears the lower coordinate card; keep Cockpit's independent visor layout.
 
 ## [0.2.0] — 2026-10-02 — God's Eye View through Your Agent
 
@@ -1242,6 +1268,13 @@ of current runtime behavior, see [`docs/CURRENT-STATE.md`](docs/CURRENT-STATE.md
   to Puppeteer 25.10.0 and Sharp 0.35.4. Cesium remains on 1.138.0.
   Browser QA awaits the new asynchronous executable-path lookup.
 
+### Live CCTV video
+
+- Live HLS video shares one decoder between the camera panel and projection,
+  with a DelDOT HTTPS source pack. Credit: Daniel Slay (@Danielslay86), PR #489.
+- Maintainer adjustments bound sessions and downloads, remove disk/subprocess
+  remuxing, reject redirects, and clean up playback on switching or disabling.
+
 ## [0.1.1] — 2026-09-01 — Installation and live-data fixes
 
 ### Changed
@@ -1479,9 +1512,3 @@ represent previously published GitHub Releases.
 
 - Initial project version.
 
-### Live CCTV integration candidate
-
-- Live HLS video shares one decoder between the camera panel and projection,
-  with a DelDOT HTTPS source pack. Credit: Daniel Slay (@Danielslay86), PR #489.
-- Maintainer adjustments bound sessions and downloads, remove disk/subprocess
-  remuxing, reject redirects, and clean up playback on switching or disabling.
